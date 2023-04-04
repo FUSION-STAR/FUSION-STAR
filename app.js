@@ -1,6 +1,4 @@
-//Import express, ejs, mongoose, body-parser, node-sass to app.js
 const express = require('express');
-const mongoose = require('mongoose');
 const ejs = require("ejs");
 const bodyParser = require('body-parser');
 const sass = require('node-sass');
