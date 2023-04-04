@@ -23,21 +23,21 @@
                             <div class="col-xl-12">
                                 <div class="auth-form">
 									<div class="text-center mb-3">
-										<!-- <a href="index"><img src="/images/logo-full.png" alt=""></a> -->
+										<img src="/images/logo-full.png" alt="">
 									</div>
                                     <h4 class="text-center mb-4">Sign up your account</h4>
-                                    <form action="index">
+                                    <form action="/sign_up" method="post">
                                         <div class="mb-3">
-                                            <label class="mb-1"><strong>Username</strong></label>
-                                            <input type="text" class="form-control" placeholder="username">
+                                            <label class="mb-1" for="username"><strong>Username</strong></label>
+                                            <input type="text" class="form-control" placeholder="username" id="username" name="username">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="mb-1"><strong>Email</strong></label>
-                                            <input type="email" class="form-control" placeholder="hello@example.com">
+                                            <label class="mb-1" for="email"><strong>Email</strong></label>
+                                            <input type="email" class="form-control" placeholder="hello@example.com" id="email" name="email">
                                         </div>
                                         <div class="mb-3">
-                                            <label class="mb-1"><strong>Password</strong></label>
-                                            <input type="password" class="form-control" placeholder="Password">
+                                            <label class="mb-1" for="password"><strong>Password</strong></label>
+                                            <input type="password" class="form-control" placeholder="Password" id="password" name="password">
                                         </div>
                                         <div class="text-center mt-4">
                                             <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
