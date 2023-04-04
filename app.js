@@ -5,11 +5,15 @@ const sass = require('node-sass');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
+const db = require("./config/db.js");
+const user = require('./model/user');
 const app = express();
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+  
+db.connect();
 
 //Sign Up
 app.get('/sign_up', (req, res) => {
@@ -36,7 +40,8 @@ app.post('/sign_up', (req, res) => {
 app.get('/sign_in', (req, res) => {
     res.render('sign_in');
 });
-  
+
+
 app.listen(3000, function() {
     console.log("Server started on port 3000");
 });
