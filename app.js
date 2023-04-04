@@ -11,13 +11,32 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+//Sign Up
+app.get('/sign_up', (req, res) => {
+    res.render('sign_up');
+});
+app.post('/sign_up', (req, res) => {
+	const { username, email, password } = req.body;
+	const newUser = new user({
+		username,
+		email,
+		password
+	});
+	newUser.save()
+		.then(() => {
+			res.redirect('/sign_in');
+		})
+		.catch((err) => {
+			console.log(err);
+			res.status(500).send('Error creating new user');
+		});
+});
+
 //Sign In
 app.get('/sign_in', (req, res) => {
     res.render('sign_in');
 });
   
-
-
 app.listen(3000, function() {
     console.log("Server started on port 3000");
 });
