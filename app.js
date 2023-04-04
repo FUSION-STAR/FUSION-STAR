@@ -2,10 +2,10 @@ const express = require('express');
 const ejs = require("ejs");
 const bodyParser = require('body-parser');
 const sass = require('node-sass');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 const app = express();
-
-
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
