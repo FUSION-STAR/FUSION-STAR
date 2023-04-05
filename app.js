@@ -9,7 +9,11 @@ const flash = require('connect-flash');
 
 const db = require("./config/db.js");
 const User = require('./model/user');
+const Product = require('./model/product');
+
 const app = express();
+
+let cart = [];
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -57,7 +61,52 @@ passport.deserializeUser((id, done) => {
         });
 });
 
-//Sign Up
+//product
+const products = [
+    {
+      id: 1,
+      name: 'Donut',
+      price: 30,
+      category: 'bakery',
+      detail: 'Freshly baked donut topped with your choice of glaze and sprinkles.',
+      image: '/images/product-img/donut.jpg'
+    },
+    {
+      id: 2,
+      name: 'Soft drink',
+      price: 20,
+      category: 'beverage',
+      detail: 'Refreshing soft drink in your choice of flavor, served over ice.',
+      image: '/images/product-img/soft-drink.jpg'
+    },
+    {
+      id: 3,
+      name: 'Fish burger',
+      price: 60,
+      category: 'burger',
+      detail: 'Crispy battered fish fillet served on a toasted bun with tartar sauce and lettuce.',
+      image: '/images/product-img/fish-burger.jpg'
+    },
+    {
+      id: 4,
+      name: 'Fried Chicken',
+      price: 50,
+      category: 'chicken',
+      detail: 'Crispy fried chicken seasoned with our secret blend of spices and served with your choice of dipping sauce.',
+      image: '/images/product-img/fried-chicken.jpg'
+    },
+    {
+      id: 5,
+      name: 'Pepperoni pizza',
+      price: 40,
+      category: 'pizza',
+      detail: 'Classic pizza topped with mozzarella cheese, pepperoni slices, and tomato sauce.',
+      image: '/images/product-img/pepperoni-pizza.jpg'
+    }
+];
+
+
+// Sign Up
 app.get('/sign_up', (req, res) => {
     res.render('sign_up');
 });
@@ -88,13 +137,17 @@ app.post('/sign_in', passport.authenticate('local', {
     failureFlash: 'Invalid email or password'
 }));
 
-//home
+// Home
 app.get("/home", async (req, res) => {
     try {
       if (req.user && req.user.email) {
         const user = await User.findOne({ email: req.user.email });
         const username = user.username;
-        res.render("home", { username: username, user: user });
+
+        const products = await Product.find();
+
+        res.render("home", { username: username, user: user, products: products });
+        
       } else {
         res.redirect("/sign_in");
       }
@@ -103,8 +156,43 @@ app.get("/home", async (req, res) => {
       res.status(500).send("Internal server error");
     }
 });
-
-
+// Cart
+app.post('/add-to-cart/:id', (req, res) => {
+    const productId = req.params.id;
+  
+    Product.findById(productId, (err, product) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error finding product');
+      }
+  
+      cart.push({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+      });
+  
+      res.redirect('/home');
+    });
+  });
+  
+  app.get('/cart', (req, res) => {
+    // Pass the cart object to the cart.ejs view
+    res.render('cart', { cart });
+  });
+  
+  // Update the cart
+  app.post('/update-cart', (req, res) => {
+    // Retrieve the cart data from the request body
+    const cartData = req.body;
+  
+    // Update the cart object
+    cart = cartData;
+  
+    // Redirect the user back to the cart page
+    res.redirect('/cart');
+  });
 
 
 app.listen(3000, function() {
