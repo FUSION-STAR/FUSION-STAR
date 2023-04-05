@@ -5,6 +5,7 @@ const sass = require('node-sass');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const session = require('express-session');
+const flash = require('connect-flash');
 
 const db = require("./config/db.js");
 const User = require('./model/user');
@@ -19,6 +20,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+app.use(flash());
 
 db.connect();
 
@@ -75,15 +78,34 @@ app.post('/sign_up', (req, res) => {
 		});
 });
 
-//Sign In
+// Sign In
 app.get('/sign_in', (req, res) => {
-    res.render('sign_in');
+    res.render('sign_in', { message: req.flash('error') });
 });
 app.post('/sign_in', passport.authenticate('local', {
-	successRedirect: '/home',
-	failureRedirect: '/sign_in',
-	failureFlash: true
+    successRedirect: '/home',
+    failureRedirect: '/sign_in',
+    failureFlash: 'Invalid email or password'
 }));
+
+//home
+app.get("/home", async (req, res) => {
+    try {
+      if (req.user && req.user.email) {
+        const user = await User.findOne({ email: req.user.email });
+        const username = user.username;
+        res.render("home", { username: username, user: user });
+      } else {
+        res.redirect("/sign_in");
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Internal server error");
+    }
+});
+
+
+
 
 app.listen(3000, function() {
     console.log("Server started on port 3000");
