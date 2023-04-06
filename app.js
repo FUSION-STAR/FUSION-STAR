@@ -120,7 +120,7 @@ app.get('/food_order', async (req, res) => {
         const username = user.username;
   
         const products = await Product.find();
-        const orders = req.user.cart;
+        const orders = req.user.order;
   
         res.render("food_order", { username: username, user: user, products: products, orders: orders });
         
@@ -149,8 +149,8 @@ app.get('/food_order', async (req, res) => {
         });
 
         // Add the order list item to the user's cart
-        req.user.cart.push(orderListItem);
-
+        req.user.order.push(orderListItem);
+ 
         // Save the user
         await req.user.save();
 
