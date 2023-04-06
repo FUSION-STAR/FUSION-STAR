@@ -222,7 +222,6 @@ app.get('/donut', async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
-
 // Burger
 app.get('/burger', async (req, res) => {
   try {
@@ -264,7 +263,46 @@ app.get('/fish-burger', async (req, res) => {
   }
 });
 
+// Beverage
+app.get('/beverage', async (req, res) => {
+  try {
+    if (req.user && req.user.email) {
+      const user = await User.findOne({ email: req.user.email });
+      const username = user.username;
 
+      const products = await Product.find();
+      const orders = req.user.order;
+
+      res.render("beverage", { username: username, user: user, products: products, orders: orders });
+      
+    } else {
+      res.redirect("/sign_in");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal server error");
+  }
+});
+// Soft-drink
+app.get('/soft-drink', async (req, res) => {
+  try {
+    if (req.user && req.user.email) {
+      const user = await User.findOne({ email: req.user.email });
+      const username = user.username;
+
+      const products = await Product.find();
+      const orders = req.user.order;
+
+      res.render("soft-drink", { username: username, user: user, products: products, orders: orders });
+      
+    } else {
+      res.redirect("/sign_in");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal server error");
+  }
+});
 
 app.listen(3000, function() {
     console.log("Server started on port 3000");
