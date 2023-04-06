@@ -243,6 +243,26 @@ app.get('/burger', async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+// Fish-burger
+app.get('/fish-burger', async (req, res) => {
+  try {
+    if (req.user && req.user.email) {
+      const user = await User.findOne({ email: req.user.email });
+      const username = user.username;
+
+      const products = await Product.find();
+      const orders = req.user.order;
+
+      res.render("fish-burger", { username: username, user: user, products: products, orders: orders });
+      
+    } else {
+      res.redirect("/sign_in");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal server error");
+  }
+});
 
 
 
