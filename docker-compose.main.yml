@@ -4,5 +4,5 @@ services:
   node-app:
     image: ${DOCKER_HUB_USERNAME}/fusion-project:latest
     ports:
-      - '8081:3000'
+      - '8080:3000'
     restart: always
